@@ -25,18 +25,15 @@ public class FileSystemCat {
         FileSystem fileSystem=FileSystem.get(URI.create(uri), configuration);
 
 
-
-
-
         /** 数据流入 */
-        //FSDataInputStream in=null;
-        //in=fileSystem.open(new Path(uri));
+        FSDataInputStream in=null;
+        in=fileSystem.open(new Path(uri));
 
         /** 将读取到hdfs内容复制到系统的输出设备中，然后利用输出设备输出文件的内容，即执行out.write(buf, 0, bytesRead);*/
 
 
 
-        //IOUtils.copyBytes(in, System.out, 4096, false);
-        //IOUtils.closeStream(in);
+        IOUtils.copyBytes(in, System.out, 4096, false);
+        IOUtils.closeStream(in);
     }
 }

@@ -1,6 +1,5 @@
 package com.readailib.homeworks;
 
-import com.google.common.collect.HashBasedTable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
@@ -12,7 +11,6 @@ import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
-import org.jruby.ext.ffi.Type;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,7 +32,7 @@ import java.util.*;
  * @create: 2018-04-01 08:18
  **/
 @Slf4j
-public class SelectHBase {
+public class NewHashBasedDistinct {
 
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -60,7 +58,7 @@ public class SelectHBase {
         /** 检查参数数目是否正确*/
         if (args.length < 3) {
             log.error("参数不正确！");
-            System.out.println("Usage: SelectHBase R=<pathFile> select:R<colNum>,<relation>,<number> distinct:<col_list>");
+            System.out.println("Usage: HashBasedDistinct R=<pathFile> select:R<colNum>,<relation>,<number> distinct:<col_list>");
             System.exit(2);
         }
         /** 目标文件的路径*/
@@ -113,18 +111,17 @@ public class SelectHBase {
         String s;
 
         // TODO: 处理多个distinct列
-        //int col1 = Integer.parseInt(distinctList.get(0).substring(1));
-        //int col2 = Integer.parseInt(distinctList.get(1).substring(1));
-        //int col3 = Integer.parseInt(distinctList.get(2).substring(1));
-        //System.out.println(distinctList);
+        int col1 = Integer.parseInt(distinctList.get(0).substring(1));
+        int col2 = Integer.parseInt(distinctList.get(1).substring(1));
+        int col3 = Integer.parseInt(distinctList.get(2).substring(1));
+        System.out.println(distinctList);
 
         /** 定义一个列表*/
         List<Integer> colList = new ArrayList<Integer>();
 
-        if (!distinctList.isEmpty()){
-            for (int i =0 ; i < distinctList.size(); i++) {
+        if (!distinctList.isEmpty()) {
+            for (int i = 0; i < distinctList.size(); i++) {
                 String substring = distinctList.get(i).substring(1);
-                System.out.println(substring);
                 colList.add(Integer.parseInt(substring));
             }
             /*Iterator<String> stringIterator = distinctList.iterator();
@@ -136,8 +133,7 @@ public class SelectHBase {
         }
 
 
-
-
+        int sum = 0;
 
 
         while ((s = in.readLine()) != null) {
@@ -149,29 +145,36 @@ public class SelectHBase {
                 // 检查对应的列是否与指定的数字相同
                 if (relation.equals("gt")) {
                     if (Float.parseFloat(split[colNum]) > number) {
+                        sum += 1;
 
-                        List<String> stringList =  new ArrayList<String>();
-                        /** 将数据存放在hashtable中*/
-                        for (int i = 0; i < colList.size(); i++) {
-                            stringList.add(split[i]);
-                        }
-                        hashtable.put(stringList, "");
+                        hashtable.put(Arrays.asList(split[col1],split[col2],split[col3]), "");
+                        System.out.println(Arrays.asList(split[col1],split[col2],split[col3]));
+
+//                        List<String> stringList = new ArrayList<String>();
+//                        /** 将数据存放在hashtable中*/
+//                        for (int i = 0; i < colList.size(); i++) {
+//                            stringList.add(split[i]);
+//                        }
+//                        hashtable.put(stringList, "");
                     }
-                }
-                 else if (relation.equals("ge")) {
+                } else if (relation.equals("ge")) {
                     if (Float.parseFloat(split[colNum]) >= number) {
+                        sum += 1;
                         /** 将数据存放在hashtable中*/
-                        List<String> stringList =  new ArrayList<String>();
+                        List<String> stringList = new ArrayList<String>();
                         /** 将数据存放在hashtable中*/
                         for (int i = 0; i < colList.size(); i++) {
                             stringList.add(split[i]);
                         }
+
                         hashtable.put(stringList, "");
                     }
                 } else if (relation.equals("eq")) {
+
                     if (Float.parseFloat(split[colNum]) == number) {
+                        sum += 1;
                         /** 将数据存放在hashtable中*/
-                        List<String> stringList =  new ArrayList<String>();
+                        List<String> stringList = new ArrayList<String>();
                         /** 将数据存放在hashtable中*/
                         for (int i = 0; i < colList.size(); i++) {
                             stringList.add(split[i]);
@@ -180,8 +183,9 @@ public class SelectHBase {
                     }
                 } else if (relation.equals("ne")) {
                     if (Float.parseFloat(split[colNum]) != number) {
+                        sum += 1;
                         /** 将数据存放在hashtable中*/
-                        List<String> stringList =  new ArrayList<String>();
+                        List<String> stringList = new ArrayList<String>();
                         /** 将数据存放在hashtable中*/
                         for (int i = 0; i < colList.size(); i++) {
                             stringList.add(split[i]);
@@ -190,8 +194,9 @@ public class SelectHBase {
                     }
                 } else if (relation.equals("lt")) {
                     if (Float.parseFloat(split[colNum]) < number) {
+                        sum += 1;
                         /** 将数据存放在hashtable中*/
-                        List<String> stringList =  new ArrayList<String>();
+                        List<String> stringList = new ArrayList<String>();
                         /** 将数据存放在hashtable中*/
                         for (int i = 0; i < colList.size(); i++) {
                             stringList.add(split[i]);
@@ -200,8 +205,9 @@ public class SelectHBase {
                     }
                 } else if (relation.equals("le")) {
                     if (Float.parseFloat(split[colNum]) <= number) {
+                        sum += 1;
                         /** 将数据存放在hashtable中*/
-                        List<String> stringList =  new ArrayList<String>();
+                        List<String> stringList = new ArrayList<String>();
                         /** 将数据存放在hashtable中*/
                         for (int i = 0; i < colList.size(); i++) {
                             stringList.add(split[i]);
@@ -216,76 +222,77 @@ public class SelectHBase {
 
             } catch (Exception e) {
                 System.out.println("文件格式出粗或者处理方式出错");
+                System.exit(8);
                 //System.out.println(e);
             }
         }
+        log.info("真实的数据大小：{}", sum);
 
 
-            //3. HashTable中的数据写入HBase中
-
-            /** 测试hashtable的大小*/
-            System.out.println("size: " + hashtable.size());
+        //3. HashTable中的数据写入HBase中
 
 
-            /** 这个将会在HBase中设置为表的名字*/
-            String tablename = "Result";
-            /** 对HBase进行配置，其中set方法接受(String,String)，然后通过set方法为属性设置值*/
-            Configuration conf = HBaseConfiguration.create();
-            conf.set("hbase.zookeeper.quorum", "hw");
-            //conf.set("hbase.master", "master:60000");
-            /** HBaseAdmin提供了一个接口来管理HBase数据库的表信息，比如增删改查，使得表无效有效，删除或者增加列族成员*/
-            HBaseAdmin admin = new HBaseAdmin(conf);
-            /** 判断数据库中是否存在表名为wordcount的表，如果存在则删除该表！*/
-            if (admin.tableExists(tablename)) {
-                System.out.println("table exists! recreating.......");
-                /** 调用HBase DML的API，使得该表无效（disable）并删除（drop）*/
-                admin.disableTable(tablename);
-                admin.deleteTable(tablename);
-            }
-            /** HTableDescriptor包含了表的名字以及对应表的列族。 */
-            HTableDescriptor htd = new HTableDescriptor(tablename);
-            /** 列族为content
-             /** HColumnDescriptor 维护着关于列族的信息，例如版本号，压缩设置等。*/
-            /** 它通常在创建表或者为表添加列族的时候使用。列族被创建后不能直接修改，只能通过删除然后重新创建的方式。*/
-            /** 列族被删除的时候，列族里面的数据也会同时被删除*/
-            HColumnDescriptor tcd = new HColumnDescriptor("res");
-            /** 创建列族*/
-            htd.addFamily(tcd);
-            /** 创建表*/
-            admin.createTable(htd);
-            admin.close();
-            /** Distinct */
-            //
-            // TODO： distinct实现
 
-            /** 将数据写到 HBase 中*/
-            // TODO：将处理完的数据写如HBase中in.close();
 
-            /** 创建Htable句柄 */
-            HTable table = new HTable(conf, tablename);
-
-            //遍历key
-            Enumeration<List<String>> listEnumeration = hashtable.keys();
-            int i = 0;
-            while (listEnumeration.hasMoreElements()) {
-
-                Put put = new Put(String.valueOf(i).getBytes());
-                List<String> stringList = listEnumeration.nextElement();
-                String c1 = stringList.get(0);
-                String c2 = stringList.get(1);
-                String c3 = stringList.get(2);
-
-                put.add("res".getBytes(), c1.getBytes(), null);
-                put.add("res".getBytes(), c2.getBytes(), null);
-                put.add("res".getBytes(), c3.getBytes(), null);
-
-                table.put(put);
-                i += 1;
-            }
-            table.close();
-            fileSystem.close();
+        /** 这个将会在HBase中设置为表的名字*/
+        String tablename = "Result";
+        /** 对HBase进行配置，其中set方法接受(String,String)，然后通过set方法为属性设置值*/
+        Configuration conf = HBaseConfiguration.create();
+        conf.set("hbase.zookeeper.quorum", "hw");
+        //conf.set("hbase.master", "master:60000");
+        /** HBaseAdmin提供了一个接口来管理HBase数据库的表信息，比如增删改查，使得表无效有效，删除或者增加列族成员*/
+        HBaseAdmin admin = new HBaseAdmin(conf);
+        /** 判断数据库中是否存在表名为wordcount的表，如果存在则删除该表！*/
+        if (admin.tableExists(tablename)) {
+            System.out.println("table exists! recreating.......");
+            /** 调用HBase DML的API，使得该表无效（disable）并删除（drop）*/
+            admin.disableTable(tablename);
+            admin.deleteTable(tablename);
         }
+        /** HTableDescriptor包含了表的名字以及对应表的列族。 */
+        HTableDescriptor htd = new HTableDescriptor(tablename);
+        /** 列族为content
+         /** HColumnDescriptor 维护着关于列族的信息，例如版本号，压缩设置等。*/
+        /** 它通常在创建表或者为表添加列族的时候使用。列族被创建后不能直接修改，只能通过删除然后重新创建的方式。*/
+        /** 列族被删除的时候，列族里面的数据也会同时被删除*/
+        HColumnDescriptor tcd = new HColumnDescriptor("res");
+        /** 创建列族*/
+        htd.addFamily(tcd);
+        /** 创建表*/
+        admin.createTable(htd);
+        admin.close();
+        /** Distinct */
+        //
+        // TODO： distinct实现
 
+        /** 将数据写到 HBase 中*/
+        // TODO：将处理完的数据写如HBase中in.close();
+
+        /** 创建Htable句柄 */
+        HTable table = new HTable(conf, tablename);
+
+        //遍历key
+        Enumeration<List<String>> listEnumeration = hashtable.keys();
+        int i = 0;
+        while (listEnumeration.hasMoreElements()) {
+
+            Put put = new Put(String.valueOf(i).getBytes());
+            List<String> stringList = listEnumeration.nextElement();
+
+            for (int j = 0; j< stringList.size(); j++) {
+                put.add("res".getBytes(), stringList.get(j).getBytes(), null);
+            }
+
+
+
+            table.put(put);
+            i += 1;
+        }
+        /** 测试hashtable的大小*/
+        log.info("HBase 的Row数: {} ", i) ;
+        table.close();
+        fileSystem.close();
+    }
 
 
 }
