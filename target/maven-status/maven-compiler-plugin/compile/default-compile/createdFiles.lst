@@ -1,8 +1,0 @@
-com\readailib\simple\WordCount.class
-com\readailib\simple\NewWordCount$TokenizerMapper.class
-com\readailib\simple\NewWordCount$IntSumReducer.class
-com\readailib\App.class
-com\readailib\simple\FileSystemCat.class
-com\readailib\simple\WordCount$Map.class
-com\readailib\simple\WordCount$Reduce.class
-com\readailib\simple\NewWordCount.class
