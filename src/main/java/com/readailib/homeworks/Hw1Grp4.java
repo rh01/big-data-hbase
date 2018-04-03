@@ -1,6 +1,5 @@
 package com.readailib.homeworks;
 
-import com.google.common.collect.HashBasedTable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
@@ -12,7 +11,6 @@ import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
-import org.jruby.ext.ffi.Type;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,7 +32,7 @@ import java.util.*;
  * @create: 2018-04-01 08:18
  **/
 @Slf4j
-public class HashBasedDistinct {
+public class Hw1Grp4 {
 
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -53,6 +51,7 @@ public class HashBasedDistinct {
         Float number;
 
         /** 使用Hash Table来存储对象，并哈希运算*/
+        /** 使用Hash Table来存储对象，内部哈希运算，这里也可以使用HashMap，HashSet等数据结构来实现distinct*/
         Hashtable<List<String>, String> hashtable = new Hashtable<List<String>, String>();
 
         //1. 检查参数格式是否正确
@@ -259,9 +258,7 @@ public class HashBasedDistinct {
         // TODO： distinct实现
 
         /** 将数据写到 HBase 中*/
-        // TODO：将处理完的数据写如HBase中
-        in.close();
-
+        // TODO：将处理完的数据写如HBase中in.close();
 
         /** 创建Htable句柄 */
         HTable table = new HTable(conf, tablename);
