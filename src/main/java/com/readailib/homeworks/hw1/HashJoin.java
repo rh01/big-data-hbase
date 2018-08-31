@@ -1,4 +1,4 @@
-package com.readailib.homeworks;
+package com.readailib.homeworks.hw1;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.conf.Configuration;
@@ -208,11 +208,11 @@ public class HashJoin {
         Set<String> strings2 = hashTable2.keySet();
         Iterator<String> iterator2 = strings2.iterator();
 
-        for (String s : strings2) {
-
-            System.out.println(s + "|" + Arrays.toString(hashTable2.get(s).get(5)) + "|" + Arrays.toString(hashTable2.get(s).get(6))+"|");
-
-        }
+//        for (String s : strings2) {
+//
+//            System.out.println(s + "|" + Arrays.toString(hashTable2.get(s).get(5)) + "|" + Arrays.toString(hashTable2.get(s).get(6))+"|");
+//
+//        }
 
         // TODO: 2018/4/2 下面实现S表对其进行哈希操作
 
@@ -262,85 +262,79 @@ public class HashJoin {
 
         }
 
-        for (int j = 0; j < result.size(); j++) {
-            String[] strings = result.get(j);
-            System.out.println("|" + strings[0] + "|" + strings[1] + "|" + strings[2] + "|");
-        }
+//        for (int j = 0; j < result.size(); j++) {
+//            String[] strings = result.get(j);
+//            System.out.println("|" + strings[0] + "|" + strings[1] + "|" + strings[2] + "|");
+//        }
         log.info("{}",result.size());
 
 
 
 
 
-//        //3. HashTable中的数据写入HBase中
-//
-//
-//        /** 这个将会在HBase中设置为表的名字*/
-//        String tablename = "Result-HashJoin";
-//        /** 对HBase进行配置，其中set方法接受(String,String)，然后通过set方法为属性设置值*/
-//        Configuration conf = HBaseConfiguration.create();
-//        conf.set("hbase.zookeeper.quorum", "hw");
-//        //conf.set("hbase.master", "master:60000");
-//        /** HBaseAdmin提供了一个接口来管理HBase数据库的表信息，比如增删改查，使得表无效有效，删除或者增加列族成员*/
-//        HBaseAdmin admin = new HBaseAdmin(conf);
-//        /** 判断数据库中是否存在表名为wordcount的表，如果存在则删除该表！*/
-//        if (admin.tableExists(tablename)) {
-//            System.out.println("table exists! recreating.......");
-//            /** 调用HBase DML的API，使得该表无效（disable）并删除（drop）*/
-//            admin.disableTable(tablename);
-//            admin.deleteTable(tablename);
-//        }
-//        /** HTableDescriptor包含了表的名字以及对应表的列族。 */
-//        HTableDescriptor htd = new HTableDescriptor(tablename);
-//        /** 列族为content
-//         /** HColumnDescriptor 维护着关于列族的信息，例如版本号，压缩设置等。*/
-//        /** 它通常在创建表或者为表添加列族的时候使用。列族被创建后不能直接修改，只能通过删除然后重新创建的方式。*/
-//        /** 列族被删除的时候，列族里面的数据也会同时被删除*/
-//        HColumnDescriptor tcd = new HColumnDescriptor("res");
-//        /** 创建列族*/
-//        htd.addFamily(tcd);
-//        /** 创建表*/
-//        admin.createTable(htd);
-//        admin.close();
-//        /** Distinct */
-//        //
-//        // TODO： distinct实现
-//
-//        /** 将数据写到 HBase 中*/
-//        // TODO：将处理完的数据写如HBase中
-//        in1.close();
-//        in2.close();
-//
-//        /** 创建Htable句柄 */
-//        HTable table = new HTable(conf, tablename);
-//
-//        //遍历key
-//        //Enumeration<List<String>> listEnumeration = hashtable.keys();
-//        //int i = 0;
-//        for (int k = 0; k < result.size(); k++) {
-//
-//            Put put = new Put(result.get(k)[0].getBytes());
-//            put.add("res".getBytes(), result.get(k)[1].getBytes(), null);
-//            put.add("res".getBytes(), result.get(k)[2].getBytes(), null);
-//            table.put(put);
-//
-//        }
-//
-//        /** 测试hashtable的大小*/
-//        log.info("HBase 的Row数: {} ", i);
-//        table.close();
-//        fileSystem1.close();
-//        fileSystem2.close();
+        //3. HashTable中的数据写入HBase中
+
+
+        /** 这个将会在HBase中设置为表的名字*/
+        String tablename = "Result";
+        /** 对HBase进行配置，其中set方法接受(String,String)，然后通过set方法为属性设置值*/
+        Configuration conf = HBaseConfiguration.create();
+        conf.set("hbase.zookeeper.quorum", "hw");
+        //conf.set("hbase.master", "master:60000");
+        /** HBaseAdmin提供了一个接口来管理HBase数据库的表信息，比如增删改查，使得表无效有效，删除或者增加列族成员*/
+        HBaseAdmin admin = new HBaseAdmin(conf);
+        /** 判断数据库中是否存在表名为wordcount的表，如果存在则删除该表！*/
+        if (admin.tableExists(tablename)) {
+            System.out.println("table exists! recreating.......");
+            /** 调用HBase DML的API，使得该表无效（disable）并删除（drop）*/
+            admin.disableTable(tablename);
+            admin.deleteTable(tablename);
+        }
+        /** HTableDescriptor包含了表的名字以及对应表的列族。 */
+        HTableDescriptor htd = new HTableDescriptor(tablename);
+        /** 列族为content
+         /** HColumnDescriptor 维护着关于列族的信息，例如版本号，压缩设置等。*/
+        /** 它通常在创建表或者为表添加列族的时候使用。列族被创建后不能直接修改，只能通过删除然后重新创建的方式。*/
+        /** 列族被删除的时候，列族里面的数据也会同时被删除*/
+        HColumnDescriptor tcd = new HColumnDescriptor("res");
+        /** 创建列族*/
+        htd.addFamily(tcd);
+        /** 创建表*/
+        admin.createTable(htd);
+        admin.close();
+        /** Distinct */
+        //
+
+        /** 将数据写到 HBase 中*/
+        in1.close();
+        in2.close();
+
+        /** 创建Htable句柄 */
+        HTable table = new HTable(conf, tablename);
+
+        //遍历key
+        //Enumeration<List<String>> listEnumeration = hashtable.keys();
+        //int i = 0;
+        for (int k = 0; k < result.size(); k++) {
+
+            Put put = new Put(result.get(k)[0].getBytes());
+            put.add("res".getBytes(), result.get(k)[1].getBytes(), null);
+            put.add("res".getBytes(), result.get(k)[2].getBytes(), null);
+            table.put(put);
+
+        }
+
+        /** 测试hashtable的大小*/
+        log.info("HBase 的Row数: {} ", i);
+        table.close();
+        fileSystem1.close();
+        fileSystem2.close();
     }
 
     public static String mkHash(String key) {
         Integer hashValue = key.hashCode();
-        Integer bucktNum = hashValue % 13; //这里设置hash范围为0-10
+        Integer bucktNum = hashValue % 101; //这里设置hash范围为0-10
         String chave = String.valueOf(bucktNum);
         return chave;
     }
-
-
-
-
 }

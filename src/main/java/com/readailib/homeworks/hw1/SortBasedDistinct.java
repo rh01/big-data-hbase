@@ -1,4 +1,4 @@
-package com.readailib.homeworks;
+package com.readailib.homeworks.hw1;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.conf.Configuration;
@@ -32,7 +32,7 @@ import java.util.*;
  * @create: 2018-04-01 08:18
  **/
 @Slf4j
-public class NewHashBasedDistinct {
+public class SortBasedDistinct {
 
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -50,7 +50,7 @@ public class NewHashBasedDistinct {
         /** 定义约束值*/
         Float number;
 
-        /** 使用Hash Table来存储对象，并哈希运算*/
+        /** 使用Hash Table来存储对象，内部哈希运算，这里也可以使用HashMap，HashSet等数据结构来实现distinct*/
         Hashtable<List<String>, String> hashtable = new Hashtable<List<String>, String>();
 
         //1. 检查参数格式是否正确
@@ -111,10 +111,10 @@ public class NewHashBasedDistinct {
         String s;
 
         // TODO: 处理多个distinct列
-        int col1 = Integer.parseInt(distinctList.get(0).substring(1));
-        int col2 = Integer.parseInt(distinctList.get(1).substring(1));
-        int col3 = Integer.parseInt(distinctList.get(2).substring(1));
-        System.out.println(distinctList);
+        //int col1 = Integer.parseInt(distinctList.get(0).substring(1));
+        //int col2 = Integer.parseInt(distinctList.get(1).substring(1));
+        //int col3 = Integer.parseInt(distinctList.get(2).substring(1));
+        //System.out.println(distinctList);
 
         /** 定义一个列表*/
         List<Integer> colList = new ArrayList<Integer>();
@@ -124,12 +124,7 @@ public class NewHashBasedDistinct {
                 String substring = distinctList.get(i).substring(1);
                 colList.add(Integer.parseInt(substring));
             }
-            /*Iterator<String> stringIterator = distinctList.iterator();
-            while (stringIterator.hasNext()) {
-                String s1 = stringIterator.next();
-                System.out.println(s1);
-                colList.add(Integer.parseInt(s1.substring(1)));
-            }*/
+
         }
 
 
@@ -142,20 +137,18 @@ public class NewHashBasedDistinct {
             try {
                 // 将s进行处理,按照分隔符将每一行分割成数组
                 String[] split = s.split("\\|");
+
                 // 检查对应的列是否与指定的数字相同
                 if (relation.equals("gt")) {
                     if (Float.parseFloat(split[colNum]) > number) {
                         sum += 1;
 
-                        hashtable.put(Arrays.asList(split[col1],split[col2],split[col3]), "");
-                        System.out.println(Arrays.asList(split[col1],split[col2],split[col3]));
-
-//                        List<String> stringList = new ArrayList<String>();
-//                        /** 将数据存放在hashtable中*/
-//                        for (int i = 0; i < colList.size(); i++) {
-//                            stringList.add(split[i]);
-//                        }
-//                        hashtable.put(stringList, "");
+                        List<String> stringList = new ArrayList<String>();
+                        /** 将数据存放在hashtable中*/
+                        for (int i = 0; i < colList.size(); i++) {
+                            stringList.add(split[colList.get(i)]);
+                        }
+                        hashtable.put(stringList, "");
                     }
                 } else if (relation.equals("ge")) {
                     if (Float.parseFloat(split[colNum]) >= number) {
@@ -164,9 +157,8 @@ public class NewHashBasedDistinct {
                         List<String> stringList = new ArrayList<String>();
                         /** 将数据存放在hashtable中*/
                         for (int i = 0; i < colList.size(); i++) {
-                            stringList.add(split[i]);
+                            stringList.add(split[colList.get(i)]);
                         }
-
                         hashtable.put(stringList, "");
                     }
                 } else if (relation.equals("eq")) {
@@ -177,18 +169,17 @@ public class NewHashBasedDistinct {
                         List<String> stringList = new ArrayList<String>();
                         /** 将数据存放在hashtable中*/
                         for (int i = 0; i < colList.size(); i++) {
-                            stringList.add(split[i]);
+                            stringList.add(split[colList.get(i)]);
                         }
                         hashtable.put(stringList, "");
                     }
                 } else if (relation.equals("ne")) {
                     if (Float.parseFloat(split[colNum]) != number) {
                         sum += 1;
-                        /** 将数据存放在hashtable中*/
                         List<String> stringList = new ArrayList<String>();
                         /** 将数据存放在hashtable中*/
                         for (int i = 0; i < colList.size(); i++) {
-                            stringList.add(split[i]);
+                            stringList.add(split[colList.get(i)]);
                         }
                         hashtable.put(stringList, "");
                     }
@@ -199,7 +190,7 @@ public class NewHashBasedDistinct {
                         List<String> stringList = new ArrayList<String>();
                         /** 将数据存放在hashtable中*/
                         for (int i = 0; i < colList.size(); i++) {
-                            stringList.add(split[i]);
+                            stringList.add(split[colList.get(i)]);
                         }
                         hashtable.put(stringList, "");
                     }
@@ -210,7 +201,7 @@ public class NewHashBasedDistinct {
                         List<String> stringList = new ArrayList<String>();
                         /** 将数据存放在hashtable中*/
                         for (int i = 0; i < colList.size(); i++) {
-                            stringList.add(split[i]);
+                            stringList.add(split[colList.get(i)]);
                         }
                         hashtable.put(stringList, "");
                     }

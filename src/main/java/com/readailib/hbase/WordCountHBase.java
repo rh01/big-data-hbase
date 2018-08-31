@@ -47,7 +47,7 @@ public class WordCountHBase {
             admin.deleteTable(tablename);
         }
         /** HTableDescriptor包含了表的名字以及对应表的列族。 */
-        HTableDescriptor htd = new HTableDescriptor(tablename);
+        HTableDescriptor htd = new HTableDescriptor(TableName.valueOf(tablename));
         /** 列族为content*/
         /** HColumnDescriptor 维护着关于列族的信息，例如版本号，压缩设置等。*/
         /** 它通常在创建表或者为表添加列族的时候使用。列族被创建后不能直接修改，只能通过删除然后重新创建的方式。*/
